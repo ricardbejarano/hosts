@@ -1,0 +1,32 @@
+name: "Update hosts blocklist"
+
+
+on:
+  push:
+    branches: ["*"]
+  schedule:
+    - cron: "0 0 * * *"
+
+
+jobs:
+
+  main:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Update hosts blocklist"
+        run: |
+          echo -e 'Automatic hosts blocklist update\n' >> commit.txt
+          echo 'Sources:' >> commit.txt
+          for URL in $(curl -s 'https://v.firebog.net/hosts/lists.php?type=tick'); do
+            curl -s "${URL}" | sed 's/\(0\.0\.0\.0\|127\.0\.0\.1\|::1\)\s*//g' | sed 's/\s*#.*//g' | sed '/^localhost$/d' | sed '/^$/d' >> hosts.tmp
+            echo "  - '${URL}'" >> commit.txt
+          done
+          sort hosts.tmp | uniq | sed 's/^/0.0.0.0 /g' | tail -n +2 > hosts
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add hosts
+          git commit --allow-empty --file commit.txt
+          git push
