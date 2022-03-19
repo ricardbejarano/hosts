@@ -4,4 +4,4 @@
 
 * Source blocklists are curated by [The Firebog](https://firebog.net/), and can be found [here](https://v.firebog.net/hosts/lists.php?type=tick).
 * The blocklist attempts to block suspicious, advertising, tracking and malicious domains.
-* The list is updated nightly through [GitHub Actions](https://github.com/features/actions). [Here](.github/workflows/update-hosts.yaml)'s the code.
+* The list is updated nightly through [GitHub Actions](.github/workflows/update-hosts.yaml).
