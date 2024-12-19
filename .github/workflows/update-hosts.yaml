@@ -19,11 +19,18 @@ jobs:
         run: |
           echo -e 'Automatic hosts blocklist update\n' >> commit.txt
           echo 'Sources:' >> commit.txt
-          for URL in $(curl -s 'https://v.firebog.net/hosts/lists.php?type=tick'); do
-            curl -s "${URL}" | sed 's/\(0\.0\.0\.0\|127\.0\.0\.1\|::1\)\s*//g' | sed 's/\s*#.*//g' | sed '/^localhost$/d' | sed '/^$/d' >> hosts.tmp
-            echo "  - '${URL}'" >> commit.txt
+          for url in $(curl --silent --show-error 'https://v.firebog.net/hosts/lists.php?type=tick'); do
+            echo "  - '${url}'" >> commit.txt
+            curl --silent --show-error "${url}" \
+              | sed 's/#.*//g' \
+              | sed 's/\s*$//g' \
+              | sed 's/^.*\s//g' \
+              | sed 's/[^a-zA-Z0-9.\-]//g' \
+              | sed '/^\s*$/d' \
+              | sed '/^localhost$/d' \
+              >> hosts.tmp
           done
-          sort hosts.tmp | uniq | sed 's/^/0.0.0.0 /g' | tail -n +2 > hosts
+          sort hosts.tmp | uniq | sed 's/^/0.0.0.0 /g' > hosts
 
           git config user.name github-actions
           git config user.email github-actions@github.com
