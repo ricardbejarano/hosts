@@ -1,4 +1,4 @@
-<p align="center"><img src="https://em-content.zobj.net/thumbs/160/apple/354/raised-hand_270b.png" width="120px"></p>
+<p align="center"><img src="https://em-content.zobj.net/thumbs/160/apple/391/raised-hand_270b.png" width="120px"></p>
 <h1 align="center">hosts</h1>
 <p align="center">Aggregated hosts blocklist, compiled nightly</p>
 
