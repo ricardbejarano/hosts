@@ -28,9 +28,9 @@ jobs:
               | sed 's/[^a-zA-Z0-9.\-]//g' \
               | sed '/^\s*$/d' \
               | sed '/^localhost$/d' \
-              >> hosts.tmp
+              >> hosts.blocklist
           done
-          sort hosts.tmp | uniq | sed 's/^/0.0.0.0 /g' > hosts
+          sort hosts.blocklist | uniq | grep --invert-match --line-regexp --file hosts.allowlist | sed 's/^/0.0.0.0 /g' > hosts
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
